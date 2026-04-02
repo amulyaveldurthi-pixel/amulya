@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page</title>
+</head>
+<body>
+    <h2>This is a page</h2>
+    <a href="/">Back Home</a>
+</body>
+</html>
+<input type="text" id="search" placeholder="Search skills or role">
+<input type="text" id="location" placeholder="Location">
+<select id="jobType">
+  <option value="">All Types</option>
+  <option value="fulltime">Full Time</option>
+  <option value="parttime">Part Time</option>
+</select>
+<input type="number" id="minSalary" placeholder="Minimum Salary">
+
+<button onclick="fetchJobs()">Search</button>
+
+<div id="jobs-container"></div>
+<button id="loadMore">Load More</button>

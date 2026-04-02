@@ -1,0 +1,4 @@
+{
+    "accessibility.signalOptions.volume": 100,
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
+}

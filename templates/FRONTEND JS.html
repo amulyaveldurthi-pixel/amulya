@@ -1,0 +1,62 @@
+<script>
+let currentPage = 1;
+
+async function fetchJobs(loadMore = false) {
+  if (!loadMore) {
+    currentPage = 1;
+    document.getElementById("jobs-container").innerHTML = "";
+  }
+
+  const search = document.getElementById("search").value;
+  const location = document.getElementById("location").value;
+  const jobType = document.getElementById("jobType").value;
+  const minSalary = document.getElementById("minSalary").value;
+
+  const res = await fetch(
+    `http://localhost:5000/api/jobs?search=${search}&location=${location}&page=${currentPage}&jobType=${jobType}&minSalary=${minSalary}`
+  );
+
+  const data = await res.json();
+
+  if (data.results.length === 0) {
+    document.getElementById("jobs-container").innerHTML =
+      "<p>No Jobs Found</p>";
+    return;
+  }
+
+  data.results.forEach(job => {
+    const jobCard = document.createElement("div");
+    jobCard.className = "job-card";
+
+    jobCard.innerHTML = `
+      <h3>${job.title}</h3>
+      <p><strong>Company:</strong> ${job.company.display_name}</p>
+      <p><strong>Location:</strong> ${job.location.display_name}</p>
+      <p><strong>Salary:</strong> ${
+        job.salary_min ? "₹" + job.salary_min : "Not Disclosed"
+      }</p>
+      <a href="${job.redirect_url}" target="_blank">
+        <button>Apply Now</button>
+      </a>
+      <button onclick="saveJob('${job.id}','${job.title}','${job.redirect_url}')">
+        Save Job
+      </button>
+    `;
+
+    document.getElementById("jobs-container").appendChild(jobCard);
+  });
+
+  currentPage++;
+}
+
+function saveJob(id, title, url) {
+  let saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
+  saved.push({ id, title, url });
+  localStorage.setItem("savedJobs", JSON.stringify(saved));
+  alert("Job Saved!");
+}
+
+document.getElementById("loadMore").addEventListener("click", () => {
+  fetchJobs(true);
+});
+</script>
